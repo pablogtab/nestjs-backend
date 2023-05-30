@@ -1,8 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, OneToMany, ManyToMany } from 'typeorm';
 import { LoginData } from './loginData.entity';
 import { LoginDataHistoric } from './loginDataHistoric.entity';
 import { Task } from '../tasks/task.entity';
 import { USER_ROLES, UserRole } from './userRole';
+import { Timer } from '../tasks/timer.entity';
 
 
 @Entity('users')
@@ -38,6 +39,9 @@ export class User {
     @OneToMany(() => LoginDataHistoric, historicLoginData => historicLoginData.user)
     historicLoginData?: LoginDataHistoric[];
 
-    @OneToMany(() => Task, task => task.user)
+    @ManyToMany(() => Task, task => task.users)
     tasks?: Task[];
+
+    @OneToMany(() => Timer, timer => timer.user)
+    timers?: Task[];
 }

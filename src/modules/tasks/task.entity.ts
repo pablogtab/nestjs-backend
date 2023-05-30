@@ -1,5 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column,  UpdateDateColumn, CreateDateColumn, DeleteDateColumn, OneToMany, ManyToMany, JoinTable, ManyToOne } from "typeorm";
 import { User } from "../users/user.entity";
+import { Timer } from "./timer.entity";
+import { Client } from "../clients/client.entity";
+import { Project } from "../projects/project.entity";
 
 
 @Entity('tasks')
@@ -16,19 +19,35 @@ export class Task {
     @Column({ length: 20, nullable: false })
     status: TaskStatus;
 
-    @Column({ type: 'datetime', name: 'created_at', default: () => 'getutcdate()' })
+    @CreateDateColumn({ type: 'datetime', name: 'created_at' })
     createdAt: Date;
 
-    @Column({ type: 'datetime', name: 'updated_at', default: () => 'getutcdate()' })
+    @UpdateDateColumn({ type: 'datetime', name: 'updated_at' })
     updatedAt: Date;
 
-    @Column({ type: 'datetime', name: 'deleted_at', nullable: true })
+    @DeleteDateColumn({ type: 'datetime', name: 'deleted_at', nullable: true })
     deletedAt: Date;
 
-    @ManyToOne(() => User, user => user.idUser)
-    @JoinColumn({ name: 'idUser' })
-    user: User;
 
+    @OneToMany(() => Timer, timer => timer.task)
+    timers: Timer[]
+
+    @ManyToMany(() => User, user => user.tasks)
+    @JoinTable({ name: 'tasksByUsers' })
+    users: User[];
+
+    @ManyToMany(() => Client, client => client.tasks)
+    @JoinTable({ name: 'tasksByClients' })
+    clients: Client[];
+
+    @ManyToOne(()=>Project, project => project.tasks)
+    project: Project;
+
+    @OneToMany(() => Task, task => task.parentTask)
+    subTasks?: Task[];
+
+    @ManyToOne(() => Task, task => task.subTasks)
+    parentTask?: Task;
 }
 
 

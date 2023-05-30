@@ -10,6 +10,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { jwtConfig } from './helpers/jwtConstants';
 import { AuthGuard } from './guards/auth.guard';
 import { RoleGuard } from './guards/role.guard';
+import { ClientsModule } from './modules/clients/clients.module';
+import { ProjectsModule } from './modules/projects/projects.module';
 
 @Module({
   imports: [
@@ -17,6 +19,8 @@ import { RoleGuard } from './guards/role.guard';
     TypeOrmModule.forRoot(dataSourceOptions),
     UsersModule,
     TasksModule,
+    ClientsModule,
+    ProjectsModule
   ],
   controllers: [AppController],
   providers: [

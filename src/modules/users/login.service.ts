@@ -75,8 +75,8 @@ export class LoginService {
 
         return {
             access_token: await this.jwtService.signAsync({
-                userEmail: user.email,
-                userId: user.idUser,
+                email: user.email,
+                idUser: user.idUser,
                 role: user.role,
             }),
         }

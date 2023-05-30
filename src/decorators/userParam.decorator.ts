@@ -2,10 +2,16 @@
 
 import { createParamDecorator, ExecutionContext, HttpException } from "@nestjs/common";
 import { ExceptionsHandler } from "@nestjs/core/exceptions/exceptions-handler";
+import { UserGuardDto } from "src/modules/users/dto/userGuard.dto";
 
-export const UserParam = createParamDecorator((data: unknown, ctx: ExecutionContext) => {
+export const UserParam = createParamDecorator((data: unknown, ctx: ExecutionContext): UserGuardDto => {
     const request = ctx.switchToHttp().getRequest();
     if (!request.user) throw new HttpException('Internal server error', 500)
-    return request.user
+    const { idUser, email, role } = request.user
+    return {
+        idUser,
+        email,
+        role
+    }
 
 })
